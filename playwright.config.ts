@@ -3,7 +3,7 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   // testDir: './tests',
   // testMatch: '**/*.test.ts',
-  testMatch:'tests/upload.test.ts',
+  testMatch:'pomTests/addToCart.test.ts',
   projects: [
     {
       name: 'chromium',
@@ -15,6 +15,7 @@ export default defineConfig({
   ],
   
   use: {
+    baseURL: 'https://ecommerce-playground.lambdatest.io/index.php?',
     headless: false, 
     video: 'on',
     screenshot: 'on', // Record video for failed tests
