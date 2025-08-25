@@ -1,66 +1,53 @@
 
-import { expect, test } from "@playwright/test";
+import { expect, test } from '../pomFixtures/addToCartFixture';
 
-import LoginPage from "../pageObjectModel/loginPage";
-import HomePage from "../pageObjectModel/homePage";
-import SpecialHotPage from "../pageObjectModel/specialHotPage";
-import RegisterPage from "../pageObjectModel/RegisterPage";
-
-const firstName = "Suriya";
-const lastName = "Vijay";
-const telephoneNumber = "9876543210";
-const email = "Suriyademo@gmail.com";
-const password = "Suriya@123";
+import * as data from '../JsonData/userDetails.json';
 
 
 test.describe("First Page Object Demo", async () => {
 
-    test("Register test_01", async ({ page, baseURL }, testInfo) => {
+    test("Register test_01", async ({ page, baseURL, registerpage}) => {
 
-        console.log('TITLE: ' + testInfo.title);
-
-        const register = new RegisterPage(page);
+        // console.log('TITLE: ' + testInfo.title);
         await page.goto(`${baseURL}route=account/register`);
-        await register.enterFirstName(firstName);
-        await register.enterLastName(lastName)
-        await register.enterEmail(email);
-        await register.enterTelephone(telephoneNumber)
-        await register.enterPassword(password);
-        await register.enterConfirmPassword(password);
-        expect(register.isSubscribeChecked()).toBeChecked();
-        await register.clickTermandConditon();
-        await register.clickContinueToRegister();
-        console.log('STATUS: ' + testInfo.status);
+        await registerpage.enterEmail(data.email);
+        await registerpage.enterTelephone(data.telephoneNumber)
+        await registerpage.enterFirstName(data.firstName);
+        await registerpage.enterPassword(data.password);
+        await registerpage.enterConfirmPassword(data.password);
+        expect(registerpage.isSubscribeChecked()).toBeChecked();
+        await registerpage.clickTermandConditon();
+        await registerpage.clickContinueToRegister();
+        await registerpage.enterLastName(data.lastName)
+       // console.log('STATUS: ' + testInfo.status);
 
 
     })
 
-    test("Login test_02", async ({ page, baseURL }) => {
-        const login = new LoginPage(page);
+    test("Login test_02", async ({ page, baseURL, loginpage}) => {
         await page.goto(`${baseURL}route=account/login`)
-        await login.enterEmail(email);
-        await login.enterLoginPassword(password);
-        await login.clickLoginBtn();
+        await loginpage.enterEmail(data.email);
+        await loginpage.enterLoginPassword(data.password);
+        await loginpage.clickLoginBtn();
         expect(await page.title()).toBe("My Account");
     })
 
-    test.only("Add to cart test_03", async ({ page, baseURL }) => {
-        const login = new LoginPage(page);
-        const homePage = new HomePage(page);
-        const special = new SpecialHotPage(page);
+    test.only("Add to cart test_03", async ({ page, baseURL, loginpage, homepage, specialhotpage}) => {
+        
+       
         await page.goto(`${baseURL}route=account/login`)
-        await login.login(email, password);
-        await homePage.clickOnSpecialHotMenu();
+        await loginpage.login(data.email, data.password);
+        await homepage.clickOnSpecialHotMenu();
         
         // await special.addFirstProductToTheCart();
         // const isCartVisible = await special.isToastVisible();
         // expect(isCartVisible).toBeVisible();
 
-        await special.clickOnContinue();
-        await special.clickOnDesktop();
-        await special.clickOnMyFirstProductAndAddToCart(); 
-        await special.clickOnCheckOut();  
-        await special.clickOnContinueShopping();
+        await specialhotpage.clickOnContinue();
+        await specialhotpage.clickOnDesktop();
+        await specialhotpage.clickOnMyFirstProductAndAddToCart(); 
+        await specialhotpage.clickOnCheckOut();  
+        await specialhotpage.clickOnContinueShopping();
 
-    })
+   })
 })
